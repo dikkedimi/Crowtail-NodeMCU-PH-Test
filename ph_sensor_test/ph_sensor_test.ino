@@ -1,8 +1,8 @@
 #define Vref 6.45 //as measured on nodeMCU 3.3v output
 #define INPUTPin A0
-//#define SUPPLYPin 16
-#define Resolution 1023
-#define PhPerStep 35.17
+#define SUPPLYPin 5
+#define Resolution 1023,2
+#define PhPerStep 59.14
 #define SensorCenter 578
 #define ScaleCenter 7
 
@@ -15,8 +15,7 @@ void setup()
 {
     Serial.begin(9600);
     pinMode(INPUTPin, INPUT);
-//    pinMode(SUPPLYPin, OUTPUT);
-//    analogWrite(SUPPLYPin, HIGH);
+    pinMode(SUPPLYPin, OUTPUT);
 }
 void loop()
 {
@@ -70,5 +69,5 @@ float CalcPH() {
     Serial.print(" = ");
     
   PHValue = ScaleCenter-1000*(sensorValue-SensorCenter)*Vref/PhPerStep/Resolution;
- Serial.print(PHValue);//PHValue= sensorValue*(Vref/Resolution);
+ Serial.println(PHValue);//PHValue= sensorValue*(Vref/Resolution);
 }
