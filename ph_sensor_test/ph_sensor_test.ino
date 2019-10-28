@@ -2,7 +2,7 @@
 #define INPUTPin A0
 //#define SUPPLYPin 5
 #define Resolution 1023.2
-#define PhPerStep 59.16 // (vinegar value - ammonia value) divided by number of ph steps in between which is 10.5
+#define PhPerStep 59.16 // Sensor steps per PH point
 #define SensorCenter 488
 #define ScaleMax 598 // Vinegar (should be Salinic Acid)
 #define ScaleMin 411 // Sink declogger
