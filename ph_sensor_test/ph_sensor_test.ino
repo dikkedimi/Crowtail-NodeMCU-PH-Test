@@ -54,9 +54,7 @@ void loop()
 //     Serial.print(" of ");
 //     Serial.println(Resolution);
     CalcPH();
-    Serial.println("");
-    Serial.println("");
-    Serial.println("");
+    Serial.println("\n\n\n");
     Serial.print(" the PH value is: ");
     Serial.print(PHValue);
     Serial.println("° PH");
