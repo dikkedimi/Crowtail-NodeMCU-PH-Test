@@ -1,12 +1,15 @@
-#define Vref 6.45 //as measured on nodeMCU 3.3v output
+#define Vref 3.27 //as measured on nodeMCU 3.3v output
 #define INPUTPin A0
-#define SUPPLYPin 5
-#define Resolution 1023,2
-#define PhPerStep 59.14
-#define SensorCenter 578
+//#define SUPPLYPin 5
+#define Resolution 1023.2
+#define PhPerStep 59.16 // (vinegar value - ammonia value) divided by number of ph steps in between which is 10.5
+#define SensorCenter 488
+#define ScaleMax 598 // Vinegar (should be Salinic Acid)
+#define ScaleMin 411 // Sink declogger
 #define ScaleCenter 7
-
-float PHValue;
+#define SensorCalibration 1000
+float ScaleSize = ScaleMin+ScaleMax; // or does this give the resolution in stead? probably..
+int PHValue;
 int sensorValue;
 unsigned long int avgValue;     //Store the average value of the sensor feedback
 int i=0;
@@ -15,7 +18,7 @@ void setup()
 {
     Serial.begin(9600);
     pinMode(INPUTPin, INPUT);
-    pinMode(SUPPLYPin, OUTPUT);
+//    pinMode(SUPPLYPin, OUTPUT);
 }
 void loop()
 {
@@ -51,23 +54,39 @@ void loop()
 //     Serial.print(" of ");
 //     Serial.println(Resolution);
     CalcPH();
+    Serial.println("");
+    Serial.println("");
+    Serial.println("");
     Serial.print(" the PH value is: ");
     Serial.print(PHValue);
     Serial.println("° PH");
-    delay(1000);
+    delay(5000);
 
 }
 
 float CalcPH() {
-//  PHValue = (sensorValue/14)/(Resolution/PhPerStep);
     Serial.print(" ");
-    Serial.print(ScaleCenter-1000);
+    Serial.print(ScaleCenter-SensorCalibration);
     Serial.print("*(");
     Serial.print(sensorValue-SensorCenter);
     Serial.print(")*");
     Serial.print(Vref/PhPerStep/Resolution);
-    Serial.print(" = ");
-    
-  PHValue = ScaleCenter-1000*(sensorValue-SensorCenter)*Vref/PhPerStep/Resolution;
- Serial.println(PHValue);//PHValue= sensorValue*(Vref/Resolution);
+    Serial.println(" = ");
+    Serial.print(" ");
+    Serial.print(ScaleCenter);
+    Serial.print("-");
+    Serial.print(SensorCalibration);
+    Serial.print("*(");
+    Serial.print(sensorValue);
+    Serial.print("-");
+    Serial.print(SensorCenter);
+    Serial.print(")*");
+    Serial.print(Vref);
+    Serial.print("/");
+    Serial.print(PhPerStep);
+    Serial.print("/");
+    Serial.print(Resolution);
+    Serial.println(" = ");
+    PHValue = ScaleCenter-SensorCalibration*(sensorValue-SensorCenter)*Vref/PhPerStep/Resolution;
+    Serial.println(round(PHValue));//PHValue= sensorValue*(Vref/Resolution);
 }
